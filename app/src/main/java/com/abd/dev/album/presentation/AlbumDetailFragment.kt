@@ -1,22 +1,22 @@
-package com.abd.dev.album
+package com.abd.dev.album.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.abd.dev.album.databinding.FragmentAlbumListBinding
+import com.abd.dev.album.databinding.FragmentDetailAlbumBinding
 
-class AlbumListFragment : Fragment() {
+class AlbumDetailFragment : Fragment() {
 
-    private var _binding: FragmentAlbumListBinding? = null
+    private var _binding: FragmentDetailAlbumBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAlbumListBinding.inflate(inflater, container, false)
+        _binding = FragmentDetailAlbumBinding.inflate(inflater, container, false)
         return binding.root
     }
 

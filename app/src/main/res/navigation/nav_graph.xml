@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/AlbumListFragment"
-        android:name="com.abd.dev.album.AlbumListFragment"
+        android:name="com.abd.dev.album.presentation.AlbumListFragment"
         android:label="@string/album_list_fragment_label"
         tools:layout="@layout/fragment_album_list">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/AlbumDetailFragment"
-        android:name="com.abd.dev.album.AlbumDetailFragment"
+        android:name="com.abd.dev.album.presentation.AlbumDetailFragment"
         android:label="@string/album_detail_fragment_label"
         tools:layout="@layout/fragment_detail_album">
     </fragment>

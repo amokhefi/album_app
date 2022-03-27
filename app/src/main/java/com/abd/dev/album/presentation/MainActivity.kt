@@ -1,4 +1,4 @@
-package com.abd.dev.album
+package com.abd.dev.album.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
