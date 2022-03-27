@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.request.CachePolicy
 import com.abd.dev.album.R
 import com.abd.dev.album.databinding.AlbumItemBinding
 import com.abd.dev.album.domain.model.Album
@@ -13,7 +15,6 @@ import com.abd.dev.album.domain.model.Album
 class AlbumListAdapter(
     private val onClick: (Album) -> Unit
 ) : ListAdapter<Album, AlbumListAdapter.ViewHolder>(AlbumDiffCallback) {
-
 
     inner class ViewHolder(private val binding: AlbumItemBinding, onClick: (Album) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
@@ -30,7 +31,14 @@ class AlbumListAdapter(
         fun bind(item: Album) {
             currentItem = item
             binding.title.text = item.title
-            binding.category.text = String.format(itemView.context.getString(R.string.category), item.albumId)
+            binding.category.text =
+                String.format(itemView.context.getString(R.string.category), item.albumId)
+            binding.thumbnailImage.load(item.thumbnailUrl) {
+                crossfade(true)
+                memoryCachePolicy(CachePolicy.ENABLED)
+                placeholder(R.drawable.loading_image)
+                error(R.drawable.broken_image)
+            }
         }
     }
 
