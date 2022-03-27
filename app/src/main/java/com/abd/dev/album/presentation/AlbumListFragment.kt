@@ -37,7 +37,7 @@ class AlbumListFragment : Fragment() {
         binding.albumRecyclerview.adapter = albumListAdapter
         binding.albumRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         lifecycleScope.launchWhenCreated {
-            viewModel.albums.collectLatest {
+            viewModel.albumList.collectLatest {
                 albumListAdapter.submitList(it)
             }
         }

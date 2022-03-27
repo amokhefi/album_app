@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         lifecycleScope.launchWhenCreated {
-            viewModel.albums.collectLatest {
+            viewModel.albumList.collectLatest {
                 println("it: " + it.size)
             }
         }

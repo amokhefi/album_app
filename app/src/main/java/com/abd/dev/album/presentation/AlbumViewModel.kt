@@ -19,7 +19,7 @@ class AlbumViewModel @Inject constructor(
     val selectedAlbum = _selectedAlbum.asStateFlow()
 
     private val _albums = MutableStateFlow<List<Album>>(emptyList())
-    val albums = _albums.asStateFlow()
+    val albumList = _albums.asStateFlow()
 
     init {
         viewModelScope.launch {
