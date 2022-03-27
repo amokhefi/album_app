@@ -1,5 +1,6 @@
 package com.abd.dev.album.domain.repository
 
+import com.abd.dev.album.data.local.db.AlbumDao
 import com.abd.dev.album.data.local.db.AlbumDatabase
 import com.abd.dev.album.data.local.model.AlbumEntity
 import com.abd.dev.album.data.remote.api.AlbumApi
@@ -9,17 +10,17 @@ import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
-    private val localDataSource: AlbumDatabase,
+    private val localDataSource: AlbumDao,
     private val mapperAlbum: AlbumMappers
 ) : AlbumRepository {
 
     override suspend fun loadAlbums(): Result<List<Album>> {
         val remoteAlbums = loadRemoteAlbums()
         return if (remoteAlbums.isSuccess) {
-            localDataSource.albumDao().insertAllAlbum(remoteAlbums.getOrDefault(emptyList()))
+            localDataSource.insertAllAlbum(remoteAlbums.getOrDefault(emptyList()))
             Result.success(
                 mapperAlbum.localToDomainMapper.mapList(
-                    localDataSource.albumDao().findAllAlbums()
+                    localDataSource.findAllAlbums()
                 )
             )
         } else {
