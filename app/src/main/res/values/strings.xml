@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">album</string>
+    <string name="title_activity_main">MainActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="album_list_fragment_label">Album List Fragment</string>
+    <string name="album_detail_fragment_label">Album Detail Fragment</string>
+</resources>
