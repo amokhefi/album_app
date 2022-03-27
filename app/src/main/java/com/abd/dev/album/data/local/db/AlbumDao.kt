@@ -21,4 +21,6 @@ interface AlbumDao {
     @Query("SELECT * from ALBUM WHERE albumId =:albumId ORDER BY title")
     suspend fun findAlbumByCategory(albumId: Int): List<AlbumEntity>
 
+    @Query("SELECT * from ALBUM")
+    suspend fun findAllAlbums(): List<AlbumEntity>
 }
