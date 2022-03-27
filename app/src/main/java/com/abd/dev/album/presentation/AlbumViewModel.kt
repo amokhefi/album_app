@@ -14,6 +14,10 @@ import javax.inject.Inject
 class AlbumViewModel @Inject constructor(
     private val repository: AlbumRepositoryImpl
 ) : ViewModel() {
+
+    private val _selectedAlbum = MutableStateFlow<Album?>(null)
+    val selectedAlbum = _selectedAlbum.asStateFlow()
+
     private val _albums = MutableStateFlow<List<Album>>(emptyList())
     val albums = _albums.asStateFlow()
 
@@ -23,4 +27,9 @@ class AlbumViewModel @Inject constructor(
             _albums.value = loadAlbums.getOrDefault(emptyList())
         }
     }
+
+    fun setSelectedItem(album: Album) {
+        _selectedAlbum.value = album
+    }
+
 }
