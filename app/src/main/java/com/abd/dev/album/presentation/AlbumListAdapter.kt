@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.abd.dev.album.R
 import com.abd.dev.album.databinding.AlbumItemBinding
 import com.abd.dev.album.domain.model.Album
 
@@ -29,6 +30,7 @@ class AlbumListAdapter(
         fun bind(item: Album) {
             currentItem = item
             binding.title.text = item.title
+            binding.category.text = String.format(itemView.context.getString(R.string.category), item.albumId)
         }
     }
 

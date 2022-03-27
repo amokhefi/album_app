@@ -4,4 +4,5 @@
     <!-- Strings used for fragments for navigation -->
     <string name="album_list_fragment_label">Album List Fragment</string>
     <string name="album_detail_fragment_label">Album Detail Fragment</string>
+    <string name="category">Category: %d</string>
 </resources>
