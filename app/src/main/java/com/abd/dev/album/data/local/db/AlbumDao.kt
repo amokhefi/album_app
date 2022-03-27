@@ -15,10 +15,10 @@ interface AlbumDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllAlbum(albums: List<AlbumEntity>)
 
-    @Query("SELECT * from AlbumEntity WHERE id =:id")
+    @Query("SELECT * from ALBUM WHERE id =:id")
     suspend fun findAlbumById(id: Int): AlbumEntity?
 
-    @Query("SELECT * from AlbumEntity WHERE albumId =:albumId ORDER BY title")
+    @Query("SELECT * from ALBUM WHERE albumId =:albumId ORDER BY title")
     suspend fun findAlbumByCategory(albumId: Int): List<AlbumEntity>
 
 }
