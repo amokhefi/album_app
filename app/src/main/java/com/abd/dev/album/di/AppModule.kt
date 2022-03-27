@@ -5,7 +5,11 @@ import androidx.room.Room
 import com.abd.dev.album.BuildConfig
 import com.abd.dev.album.data.local.db.AlbumDatabase
 import com.abd.dev.album.data.local.utils.DATABASE_NAME
+import com.abd.dev.album.data.local.utils.RemoteAlbumToLocalAlbumMapper
 import com.abd.dev.album.data.remote.api.AlbumApi
+import com.abd.dev.album.domain.repository.AlbumMappers
+import com.abd.dev.album.domain.repository.AlbumRepositoryImpl
+import com.abd.dev.album.domain.utils.LocalAlbumToDomainMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,4 +41,22 @@ object AppModule {
             context.applicationContext,
             AlbumDatabase::class.java, DATABASE_NAME
         ).build()
+
+    @Singleton
+    @Provides
+    fun provideAlbumMapper() =
+        AlbumMappers(
+            RemoteAlbumToLocalAlbumMapper(),
+            LocalAlbumToDomainMapper()
+        )
+
+    @Singleton
+    @Provides
+    fun provideAlbumRepository(
+        api: AlbumApi,
+        database: AlbumDatabase,
+        mappers: AlbumMappers
+    ) = AlbumRepositoryImpl(
+        api, database.albumDao(), mappers
+    )
 }
