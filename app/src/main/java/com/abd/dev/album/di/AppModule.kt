@@ -1,10 +1,15 @@
 package com.abd.dev.album.di
 
+import android.content.Context
+import androidx.room.Room
 import com.abd.dev.album.BuildConfig
+import com.abd.dev.album.data.local.db.AlbumDatabase
+import com.abd.dev.album.data.local.utils.DATABASE_NAME
 import com.abd.dev.album.data.remote.api.AlbumApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,4 +29,12 @@ object AppModule {
             .build()
             .create(AlbumApi::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideDatabase(@ApplicationContext context: Context): AlbumDatabase =
+        Room.databaseBuilder(
+            context.applicationContext,
+            AlbumDatabase::class.java, DATABASE_NAME
+        ).build()
 }
