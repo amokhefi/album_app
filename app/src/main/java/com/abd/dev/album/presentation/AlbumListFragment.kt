@@ -44,8 +44,10 @@ class AlbumListFragment : Fragment() {
     }
 
     private fun onAlbumClicked(album: Album) {
-        findNavController().navigate(R.id.action_listFragment_to_DetailFragment)
         viewModel.setSelectedItem(album)
+        if (requireContext().resources.getBoolean(R.bool.isLageScreen).not()) {
+            findNavController().navigate(R.id.action_listFragment_to_DetailFragment)
+        }
     }
 
     override fun onDestroyView() {
