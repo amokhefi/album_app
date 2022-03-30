@@ -37,8 +37,28 @@ class AlbumListFragment : Fragment() {
         binding.albumRecyclerview.adapter = albumListAdapter
         binding.albumRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         lifecycleScope.launchWhenCreated {
-            viewModel.albumList.collectLatest {
-                albumListAdapter.submitList(it)
+            viewModel.uiState.collectLatest {
+                when(it) {
+                    is AlbumState.Error -> showError(it.error)
+                    AlbumState.Loading -> binding.progressBar.visibility = View.VISIBLE
+                    is AlbumState.Success ->  {
+                        binding.progressBar.visibility = View.GONE
+                        albumListAdapter.submitList(it.albums)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun showError(error: NetworkError) {
+        binding.progressBar.visibility = View.GONE
+        when(error) {
+            NetworkError.UnAvailableError -> {
+
+            }
+            NetworkError.UnknownError -> {
+
             }
         }
     }

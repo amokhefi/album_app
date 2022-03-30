@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,9 +21,42 @@ class AlbumViewModel @Inject constructor(
     private val _albums = MutableStateFlow<List<UiAlbum>>(emptyList())
     val albumList = _albums.asStateFlow()
 
+    private val _uiState = MutableStateFlow<AlbumState>(AlbumState.Loading)
+    val uiState = _uiState.asStateFlow()
+
     init {
         viewModelScope.launch {
             val loadAlbums = repository.loadAlbums()
+
+            when {
+                loadAlbums.isFailure -> {
+                    when (loadAlbums.exceptionOrNull()) {
+                        is HttpException -> {
+                            _uiState.value = AlbumState.Error(NetworkError.UnAvailableError)
+                        }
+                        is Exception -> {
+                            _uiState.value = AlbumState.Error(NetworkError.UnknownError)
+                        }
+                        null -> Unit
+                    }
+
+                }
+
+                loadAlbums.isSuccess -> {
+                    _uiState.value = AlbumState.Success(
+                        loadAlbums.getOrDefault(emptyList()).map { album ->
+                            UiAlbum(
+                                id = album.id,
+                                albumId = album.albumId,
+                                title = album.title,
+                                thumbnailUrl = album.thumbnailUrl,
+                                url = album.url,
+                            )
+                        }
+                    )
+                }
+
+            }
             _albums.value = loadAlbums.getOrDefault(emptyList()).map { album ->
                 UiAlbum(
                     id = album.id,
@@ -39,4 +73,15 @@ class AlbumViewModel @Inject constructor(
         _selectedAlbum.value = album
     }
 
+}
+
+sealed class AlbumState {
+    object Loading : AlbumState()
+    class Success(val albums: List<UiAlbum>) : AlbumState()
+    class Error(val error: NetworkError) : AlbumState()
+}
+
+sealed class NetworkError {
+    object UnAvailableError : NetworkError()
+    object UnknownError : NetworkError()
 }

@@ -1,10 +1,10 @@
 package com.abd.dev.album.domain.repository
 
 import com.abd.dev.album.data.local.db.AlbumDao
-import com.abd.dev.album.data.local.db.AlbumDatabase
 import com.abd.dev.album.data.local.model.AlbumEntity
 import com.abd.dev.album.data.remote.api.AlbumApi
 import com.abd.dev.album.domain.model.Album
+import retrofit2.HttpException
 import javax.inject.Inject
 
 
@@ -40,6 +40,8 @@ class AlbumRepositoryImpl @Inject constructor(
             } else {
                 Result.failure(Exception())
             }
+        } catch (httpException: HttpException) {
+            Result.failure(httpException)
         } catch (exception: Exception) {
             Result.failure(exception)
         }
