@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abd.dev.album.R
 import com.abd.dev.album.databinding.FragmentAlbumListBinding
-import com.abd.dev.album.domain.model.Album
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -38,10 +37,10 @@ class AlbumListFragment : Fragment() {
         binding.albumRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         lifecycleScope.launchWhenCreated {
             viewModel.uiState.collectLatest {
-                when(it) {
+                when (it) {
                     is AlbumState.Error -> showError(it.error)
                     AlbumState.Loading -> binding.progressBar.visibility = View.VISIBLE
-                    is AlbumState.Success ->  {
+                    is AlbumState.Success -> {
                         binding.progressBar.visibility = View.GONE
                         albumListAdapter.submitList(it.albums)
                     }
@@ -53,11 +52,14 @@ class AlbumListFragment : Fragment() {
 
     private fun showError(error: NetworkError) {
         binding.progressBar.visibility = View.GONE
-        when(error) {
+        when (error) {
             NetworkError.UnAvailableError -> {
 
             }
             NetworkError.UnknownError -> {
+
+            }
+            NetworkError.RemoteError -> {
 
             }
         }

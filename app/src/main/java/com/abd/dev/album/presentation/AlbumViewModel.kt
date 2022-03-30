@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +33,9 @@ class AlbumViewModel @Inject constructor(
                 loadAlbums.isFailure -> {
                     when (loadAlbums.exceptionOrNull()) {
                         is HttpException -> {
+                            _uiState.value = AlbumState.Error(NetworkError.RemoteError)
+                        }
+                        is IOException -> {
                             _uiState.value = AlbumState.Error(NetworkError.UnAvailableError)
                         }
                         is Exception -> {
@@ -83,5 +87,6 @@ sealed class AlbumState {
 
 sealed class NetworkError {
     object UnAvailableError : NetworkError()
+    object RemoteError : NetworkError()
     object UnknownError : NetworkError()
 }
