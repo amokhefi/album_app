@@ -38,7 +38,7 @@ class AlbumDetailFragment : Fragment() {
         }
     }
 
-    private fun updateAlbumInfo(album: Album) {
+    private fun updateAlbumInfo(album: UiAlbum) {
         binding.apply {
             title.text = album.title
             category.text = String.format(getString(R.string.category), album.albumId)
