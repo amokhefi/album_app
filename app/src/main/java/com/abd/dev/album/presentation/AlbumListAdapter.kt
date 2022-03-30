@@ -9,28 +9,38 @@ import coil.load
 import coil.request.CachePolicy
 import com.abd.dev.album.R
 import com.abd.dev.album.databinding.AlbumItemBinding
-import com.abd.dev.album.domain.model.Album
 
 
 class AlbumListAdapter(
-    private val onClick: (Album) -> Unit
-) : ListAdapter<Album, AlbumListAdapter.ViewHolder>(AlbumDiffCallback) {
+    private val onClick: (UiAlbum) -> Unit
+) : ListAdapter<UiAlbum, AlbumListAdapter.ViewHolder>(AlbumDiffCallback) {
 
-    inner class ViewHolder(private val binding: AlbumItemBinding, onClick: (Album) -> Unit) :
+    var currentPosition = -1
+
+    inner class ViewHolder(private val binding: AlbumItemBinding, onClick: (UiAlbum) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
-        private var currentItem: Album? = null
+        private var currentItem: UiAlbum? = null
 
         init {
             itemView.setOnClickListener {
                 currentItem?.let {
+                    notifyItemChanged(currentPosition)
+                    currentPosition = position
+                    notifyItemChanged(currentPosition)
                     onClick(it)
                 }
             }
         }
 
-        fun bind(item: Album) {
+        fun bind(item: UiAlbum, position: Int) {
             currentItem = item
             binding.title.text = item.title
+            binding.cardContainer.background.setTint(
+                binding.root.context.getColor(
+                    if (currentPosition == position) R.color.orange
+                    else R.color.white
+                )
+            )
             binding.category.text =
                 String.format(itemView.context.getString(R.string.category), item.albumId)
             binding.thumbnailImage.load(item.thumbnailUrl) {
@@ -54,16 +64,16 @@ class AlbumListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, position)
     }
 }
 
-object AlbumDiffCallback : DiffUtil.ItemCallback<Album>() {
-    override fun areItemsTheSame(oldItem: Album, newItem: Album): Boolean {
+object AlbumDiffCallback : DiffUtil.ItemCallback<UiAlbum>() {
+    override fun areItemsTheSame(oldItem: UiAlbum, newItem: UiAlbum): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: Album, newItem: Album): Boolean {
+    override fun areContentsTheSame(oldItem: UiAlbum, newItem: UiAlbum): Boolean {
         return oldItem.id == newItem.id
     }
 }

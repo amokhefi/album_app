@@ -43,7 +43,7 @@ class AlbumListFragment : Fragment() {
         }
     }
 
-    private fun onAlbumClicked(album: Album) {
+    private fun onAlbumClicked(album: UiAlbum) {
         viewModel.setSelectedItem(album)
         if (requireContext().resources.getBoolean(R.bool.isLageScreen).not()) {
             findNavController().navigate(R.id.action_listFragment_to_DetailFragment)
