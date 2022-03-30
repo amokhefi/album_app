@@ -1,8 +1,10 @@
 package com.abd.dev.album.domain.repository
 
 import com.abd.dev.album.data.local.db.AlbumDao
+import com.abd.dev.album.data.local.utils.DataLoadingStore
 import com.abd.dev.album.data.remote.api.AlbumApi
 import com.abd.dev.album.domain.model.Album
+import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -11,19 +13,29 @@ import javax.inject.Inject
 class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
     private val localDataSource: AlbumDao,
-    private val mapperAlbum: AlbumMappers
+    private val mapperAlbum: AlbumMappers,
+    private val dataStore: DataLoadingStore
 ) : AlbumRepository {
 
     override suspend fun loadAlbums(): Result<List<Album>> {
-        val remoteAlbums = loadRemoteAlbums()
-        return if (remoteAlbums.isSuccess) {
-            Result.success(
+        val isDataLoaded = dataStore.isDataLoaded().first()
+        if (isDataLoaded == true) {
+            return Result.success(
                 mapperAlbum.localToDomainMapper.mapList(
                     localDataSource.findAllAlbums()
                 )
             )
         } else {
-            Result.failure(remoteAlbums.exceptionOrNull() ?: Exception())
+            val remoteAlbums = loadRemoteAlbums()
+            return if (remoteAlbums.isSuccess) {
+                Result.success(
+                    mapperAlbum.localToDomainMapper.mapList(
+                        localDataSource.findAllAlbums()
+                    )
+                )
+            } else {
+                Result.failure(remoteAlbums.exceptionOrNull() ?: Exception())
+            }
         }
     }
 
@@ -36,6 +48,7 @@ class AlbumRepositoryImpl @Inject constructor(
                         .remoteToLocalAlbumMapper
                         .mapList(response.body()!!)
                 )
+                dataStore.setDataLoaded()
                 Result.success(Unit)
             } else {
                 Result.failure(Exception())
