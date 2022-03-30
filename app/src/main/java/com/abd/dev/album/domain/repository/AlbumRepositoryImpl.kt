@@ -17,7 +17,6 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun loadAlbums(): Result<List<Album>> {
         val remoteAlbums = loadRemoteAlbums()
         return if (remoteAlbums.isSuccess) {
-            localDataSource.insertAllAlbum(remoteAlbums.getOrDefault(emptyList()))
             Result.success(
                 mapperAlbum.localToDomainMapper.mapList(
                     localDataSource.findAllAlbums()
@@ -28,15 +27,15 @@ class AlbumRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun loadRemoteAlbums(): Result<List<AlbumEntity>> {
+    private suspend fun loadRemoteAlbums(): Result<Unit> {
         return try {
             val response = api.getAlbums()
             if (response.isSuccessful && response.body() != null) {
-                Result.success(
-                    mapperAlbum
-                        .remoteToLocalAlbumMapper
-                        .mapList(response.body()!!)
-                )
+                localDataSource.insertAllAlbum(mapperAlbum
+                    .remoteToLocalAlbumMapper
+                    .mapList(response.body()!!))
+                Result.success(Unit)
+
             } else {
                 Result.failure(Exception())
             }
