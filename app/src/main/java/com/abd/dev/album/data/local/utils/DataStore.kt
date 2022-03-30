@@ -27,7 +27,7 @@ class DataLoadingStore @Inject constructor(
         }
     }
 
-    fun isDataLoaded(): Flow<Any> {
+    fun isDataLoaded(): Flow<Boolean> {
         return dataStore.data.map { preferences ->
             preferences[IS_DATA_LOADED] ?: false
         }

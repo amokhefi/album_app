@@ -19,7 +19,7 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override suspend fun loadAlbums(): Result<List<Album>> {
         val isDataLoaded = dataStore.isDataLoaded().first()
-        if (isDataLoaded == true) {
+        if (isDataLoaded) {
             return Result.success(
                 mapperAlbum.localToDomainMapper.mapList(
                     localDataSource.findAllAlbums()
