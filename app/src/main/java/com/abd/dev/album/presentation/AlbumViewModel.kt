@@ -19,9 +19,6 @@ class AlbumViewModel @Inject constructor(
     private val _selectedAlbum = MutableStateFlow<UiAlbum?>(null)
     val selectedAlbum = _selectedAlbum.asStateFlow()
 
-    private val _albums = MutableStateFlow<List<UiAlbum>>(emptyList())
-    val albumList = _albums.asStateFlow()
-
     private val _uiState = MutableStateFlow<AlbumState>(AlbumState.Loading)
     val uiState = _uiState.asStateFlow()
 
@@ -60,15 +57,6 @@ class AlbumViewModel @Inject constructor(
                     )
                 }
 
-            }
-            _albums.value = loadAlbums.getOrDefault(emptyList()).map { album ->
-                UiAlbum(
-                    id = album.id,
-                    albumId = album.albumId,
-                    title = album.title,
-                    thumbnailUrl = album.thumbnailUrl,
-                    url = album.url,
-                )
             }
         }
     }
