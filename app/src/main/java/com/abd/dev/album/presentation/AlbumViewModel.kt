@@ -39,7 +39,7 @@ class AlbumViewModel @Inject constructor(
                         is Exception -> {
                             _uiState.value = AlbumState.Error(NetworkError.UnknownError)
                         }
-                        null -> Unit
+                        else -> Unit
                     }
 
                 }
