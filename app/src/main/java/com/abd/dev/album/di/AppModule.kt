@@ -6,6 +6,7 @@ import com.abd.dev.album.BuildConfig
 import com.abd.dev.album.data.local.db.AlbumDatabase
 import com.abd.dev.album.data.local.utils.DATABASE_NAME
 import com.abd.dev.album.data.local.utils.DataLoadingStore
+import com.abd.dev.album.data.local.utils.DataLoadingStoreImpl
 import com.abd.dev.album.data.local.utils.RemoteAlbumToLocalAlbumMapper
 import com.abd.dev.album.data.remote.api.AlbumApi
 import com.abd.dev.album.domain.repository.AlbumMappers
@@ -67,5 +68,5 @@ object AppModule {
     @Provides
     fun provideDataStore(
         @ApplicationContext context: Context
-    ) = DataLoadingStore(context)
+    ) : DataLoadingStore = DataLoadingStoreImpl(context)
 }
