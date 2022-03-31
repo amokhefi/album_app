@@ -25,7 +25,7 @@ class FakeAlbumRepository : AlbumRepository {
 
             HttpException(
                 error<Any>(
-                    500,
+                    503,
                     "Test Server Error".toResponseBody("text/plain".toMediaTypeOrNull())
                 )
             )

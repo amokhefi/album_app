@@ -8,8 +8,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,10 +28,11 @@ class AlbumViewModelTest {
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(Dispatchers.Default)
+        Dispatchers.setMain(Dispatchers.Unconfined)
         repository = FakeAlbumRepository()
         viewModel = AlbumViewModel(repository)
     }
+
 
     @Test
     fun `initial state should loading`() = runTest{
@@ -50,6 +54,15 @@ class AlbumViewModelTest {
         val result = viewModel.uiState.first()
         assertThat(result).isInstanceOf(AlbumState.Error::class.java)
         assertThat((result as AlbumState.Error).error).isEqualTo(NetworkError.UnAvailableError)
+    }
+
+    @Test
+    fun `load items when server Error should return HttpError`() = runBlocking{
+        repository.isServerError = true
+        viewModel.loadItems()
+        val result = viewModel.uiState.first()
+        assertThat(result).isInstanceOf(AlbumState.Error::class.java)
+        assertThat((result as AlbumState.Error).error).isEqualTo(NetworkError.RemoteError)
     }
 
 }
