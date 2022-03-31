@@ -1,5 +1,6 @@
 package com.abd.dev.album.presentation
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +31,6 @@ class AlbumListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.loadItems()
         val albumListAdapter = AlbumListAdapter {
             onAlbumClicked(it)
         }
@@ -55,15 +55,44 @@ class AlbumListFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         when (error) {
             NetworkError.UnAvailableError -> {
-
+                showErrorMessage(
+                    getString(R.string.network_issues_message),
+                    getString(R.string.retry)
+                ) {
+                    viewModel.loadItems()
+                }
             }
             NetworkError.UnknownError -> {
+                showErrorMessage(
+                    getString(R.string.unkonw_error),
+                    getString(R.string.cancel)
+                ) {
+                    requireActivity().finish()
 
+                }
             }
             NetworkError.RemoteError -> {
-
+                showErrorMessage(
+                    getString(R.string.remote_server_error),
+                    getString(R.string.cancel)
+                ) {
+                    requireActivity().finish()
+                }
             }
         }
+    }
+
+    private fun showErrorMessage(
+        message: String,
+        positiveButtonText: String,
+        onClick: () -> Unit = {}
+    ) {
+        AlertDialog.Builder(requireContext())
+            .setMessage(message)
+            .setPositiveButton(positiveButtonText) { dialog, _ ->
+                dialog.dismiss()
+                onClick.invoke()
+            }.create().show()
     }
 
     private fun onAlbumClicked(album: UiAlbum) {

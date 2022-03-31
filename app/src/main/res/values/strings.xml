@@ -5,4 +5,9 @@
     <string name="album_list_fragment_label">Album List Fragment</string>
     <string name="album_detail_fragment_label">Album Detail Fragment</string>
     <string name="category">Category: %d</string>
+    <string name="network_issues_message">Vérifier votre connexion internet et réassyé</string>
+    <string name="retry">Réassayer</string>
+    <string name="cancel">Annuler</string>
+    <string name="unkonw_error">Une errue inconnue est survenue</string>
+    <string name="remote_server_error">Une erruer serveur</string>
 </resources>

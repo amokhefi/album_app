@@ -3,7 +3,6 @@ package com.abd.dev.album.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abd.dev.album.domain.repository.AlbumRepository
-import com.abd.dev.album.domain.repository.AlbumRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +22,14 @@ class AlbumViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<AlbumState>(AlbumState.Loading)
     val uiState = _uiState.asStateFlow()
 
+
+    init {
+        loadItems()
+    }
+
     fun loadItems() {
         viewModelScope.launch {
+            _uiState.value = AlbumState.Loading
             val loadAlbums = repository.loadAlbums()
 
             when {
