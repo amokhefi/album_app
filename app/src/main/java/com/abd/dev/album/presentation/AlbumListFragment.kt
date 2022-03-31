@@ -30,6 +30,7 @@ class AlbumListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.loadItems()
         val albumListAdapter = AlbumListAdapter {
             onAlbumClicked(it)
         }
