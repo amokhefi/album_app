@@ -2,6 +2,7 @@ package com.abd.dev.album.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.abd.dev.album.domain.repository.AlbumRepository
 import com.abd.dev.album.domain.repository.AlbumRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val repository: AlbumRepositoryImpl
+    private val repository: AlbumRepository
 ) : ViewModel() {
 
     private val _selectedAlbum = MutableStateFlow<UiAlbum?>(null)

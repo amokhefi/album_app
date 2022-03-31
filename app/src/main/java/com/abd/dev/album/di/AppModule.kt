@@ -9,6 +9,7 @@ import com.abd.dev.album.data.local.utils.DataLoadingStore
 import com.abd.dev.album.data.local.utils.RemoteAlbumToLocalAlbumMapper
 import com.abd.dev.album.data.remote.api.AlbumApi
 import com.abd.dev.album.domain.repository.AlbumMappers
+import com.abd.dev.album.domain.repository.AlbumRepository
 import com.abd.dev.album.domain.repository.AlbumRepositoryImpl
 import com.abd.dev.album.domain.utils.LocalAlbumToDomainMapper
 import dagger.Module
@@ -58,7 +59,7 @@ object AppModule {
         database: AlbumDatabase,
         mappers: AlbumMappers,
         dataStore: DataLoadingStore
-    ) = AlbumRepositoryImpl(
+    ) : AlbumRepository = AlbumRepositoryImpl(
         api, database.albumDao(), mappers, dataStore
     )
 
