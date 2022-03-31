@@ -1,4 +1,4 @@
-# Album App (test)
+# Album Android App
 
 Simple Android Application to showcase basic android principles.
 
